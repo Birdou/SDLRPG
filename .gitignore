@@ -1,0 +1,5 @@
+./objects/
+*.ink
+*.exe
+*.sublime-project
+*.sublime-workspace

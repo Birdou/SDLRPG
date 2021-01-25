@@ -1,0 +1,9 @@
+<map id="AIComponent" name="AIComponent">
+<area shape="rect" id="node1" title=" " alt="" coords="200,433,311,460"/>
+<area shape="rect" id="node2" href="$classComponent.html" title=" " alt="" coords="235,95,332,121"/>
+<area shape="rect" id="node4" href="$classColliderComponent.html" title=" " alt="" coords="182,344,329,371"/>
+<area shape="rect" id="node5" href="$classTransformComponent.html" title=" " alt="" coords="83,243,246,269"/>
+<area shape="rect" id="node7" href="$classSpriteComponent.html" title=" " alt="" coords="304,293,439,320"/>
+<area shape="rect" id="node3" href="$classEntity.html" title=" " alt="" coords="5,5,65,32"/>
+<area shape="rect" id="node6" href="$classVector2D.html" title=" " alt="" coords="91,95,172,121"/>
+</map>

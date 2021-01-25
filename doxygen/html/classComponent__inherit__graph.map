@@ -1,0 +1,19 @@
+<map id="Component" name="Component">
+<area shape="rect" id="node1" title=" " alt="" coords="5,385,103,412"/>
+<area shape="rect" id="node2" href="$classAIComponent.html" title=" " alt="" coords="177,5,287,32"/>
+<area shape="rect" id="node3" href="$classBackground.html" title=" " alt="" coords="183,56,281,83"/>
+<area shape="rect" id="node4" href="$classButton.html" title=" " alt="" coords="199,107,265,133"/>
+<area shape="rect" id="node5" href="$classCharacterComponent.html" title=" " alt="" coords="152,157,312,184"/>
+<area shape="rect" id="node6" href="$classColliderComponent.html" title=" " alt="" coords="159,208,305,235"/>
+<area shape="rect" id="node7" href="$classDrop.html" title=" " alt="" coords="205,259,259,285"/>
+<area shape="rect" id="node8" href="$classInventory.html" title=" " alt="" coords="190,309,274,336"/>
+<area shape="rect" id="node9" href="$classItemComponent.html" title=" " alt="" coords="169,360,295,387"/>
+<area shape="rect" id="node10" href="$classKeyboardController.html" title=" " alt="" coords="159,411,305,437"/>
+<area shape="rect" id="node11" href="$classMenu.html" title=" " alt="" coords="203,461,261,488"/>
+<area shape="rect" id="node12" href="$classProjectileComponent.html" title=" " alt="" coords="153,512,311,539"/>
+<area shape="rect" id="node13" href="$classSpawnController.html" title=" " alt="" coords="167,563,297,589"/>
+<area shape="rect" id="node14" href="$classSpriteComponent.html" title=" " alt="" coords="165,613,299,640"/>
+<area shape="rect" id="node15" href="$classTileComponent.html" title=" " alt="" coords="171,664,293,691"/>
+<area shape="rect" id="node16" href="$classTransformComponent.html" title=" " alt="" coords="151,715,313,741"/>
+<area shape="rect" id="node17" href="$classUILabel.html" title=" " alt="" coords="197,765,267,792"/>
+</map>

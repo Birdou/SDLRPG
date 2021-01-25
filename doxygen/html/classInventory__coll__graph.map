@@ -1,0 +1,9 @@
+<map id="Inventory" name="Inventory">
+<area shape="rect" id="node1" title=" " alt="" coords="105,367,189,393"/>
+<area shape="rect" id="node2" href="$classComponent.html" title=" " alt="" coords="77,95,175,121"/>
+<area shape="rect" id="node7" href="$classItemComponent.html" title=" " alt="" coords="164,172,291,199"/>
+<area shape="rect" id="node3" href="$classEntity.html" title=" " alt="" coords="5,5,65,32"/>
+<area shape="rect" id="node4" href="$classInventoryButton.html" title=" " alt="" coords="297,263,424,289"/>
+<area shape="rect" id="node5" href="$classButtonTexture.html" title=" " alt="" coords="315,172,428,199"/>
+<area shape="rect" id="node6" href="$classItemFrame.html" title=" " alt="" coords="169,263,262,289"/>
+</map>
