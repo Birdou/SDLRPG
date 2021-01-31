@@ -1,5 +1,5 @@
 ./objects
-*.Ink
+*.lnk
 *.exe
 *.zip
 *.sublime-project
