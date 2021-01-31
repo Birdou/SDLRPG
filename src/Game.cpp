@@ -566,15 +566,20 @@ Entity& SpawnEnemy(Vector2D position, int group)
 Entity& SpawnRat(Vector2D position, int group)
 {
 	auto& enemy = Game::assets->CreateNPC(position, 32, 32, 4, "rat", AIComponent::rat, Game::groupEnemies, &player);
-	enemy.getComponent<CharacterComponent>().dmg = 5;
-	enemy.getComponent<CharacterComponent>().basedmg = 2;
+	
+	enemy.getComponent<CharacterComponent>().dmg = 2;
+	enemy.getComponent<CharacterComponent>().basedmg = 1;
 	enemy.getComponent<CharacterComponent>().souls = 16;
+	enemy.getComponent<CharacterComponent>().life.max = 50;
+
 	enemy.getComponent<ColliderComponent>().Fit(32, 68, 73, 18);
 	enemy.getComponent<ColliderComponent>().Hit(34, 40, 81, 41);
+
 	enemy.addComponent<Drop>();
-	enemy.getComponent<Drop>().defineDrop("sword", 5);
-	enemy.getComponent<Drop>().defineDrop("staff", 5);
-	enemy.getComponent<Drop>().defineDrop("bow", 5);
+	enemy.getComponent<Drop>().defineDrop("sword", 15);
+	enemy.getComponent<Drop>().defineDrop("staff", 2);
+	enemy.getComponent<Drop>().defineDrop("bow", 2);
+	
 	enemy.addGroup(group);
 	enemy.update();
 	return enemy;

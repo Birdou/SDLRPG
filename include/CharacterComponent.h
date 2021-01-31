@@ -10,8 +10,8 @@
 
 struct Attribute
 {
-	float value;
-	float max;
+	float value = 100;
+	float max = 100;
 	SDL_Texture * tex;
 	SDL_Rect attbar;
 };
@@ -51,8 +51,7 @@ public:
 	{
 		transform = &entity->getComponent<TransformComponent>();
 
-		life.max = 100;
-		life.value = 100;
+		life.value = life.max;
 
 		if (entity->hasGroup(Game::groupPlayers))
 		{
