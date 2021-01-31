@@ -1,5 +1,6 @@
 ./objects
 *.Ink
 *.exe
+*.zip
 *.sublime-project
 *.sublime-workspace
