@@ -5,8 +5,6 @@
 #include "ColliderComponent.h"
 #include "TileComponent.h"
 
-extern Manager manager;
-
 Map::Map(std::string tID, int ms, int ts) : texID(tID), mapScale(ms), tileSize(ts)
 {
 	scalledSize = ms * ts;
@@ -70,7 +68,7 @@ void Map::LoadMap(const char * path, int tileswide)
 			}
 			if(count > 1)
 			{
-				auto& tcol(manager.addEntity());
+				auto& tcol(getManager().addEntity());
 				tcol.addComponent<ColliderComponent>("terrain", initial * scalledSize, y * scalledSize, count * scalledSize, scalledSize);
 				tcol.addGroup(Game::groupColliders);
 				optimized += count;
@@ -95,7 +93,7 @@ void Map::LoadMap(const char * path, int tileswide)
 			}
 			if(count > 1)
 			{
-				auto& tcol(manager.addEntity());
+				auto& tcol(getManager().addEntity());
 				tcol.addComponent<ColliderComponent>("terrain", x * scalledSize, initial * scalledSize, scalledSize, count * scalledSize);
 				tcol.addGroup(Game::groupColliders);
 				optimized += count;
@@ -110,7 +108,7 @@ void Map::LoadMap(const char * path, int tileswide)
 		{
 			if(map[y][x] == 0)
 			{
-				auto& tcol(manager.addEntity());
+				auto& tcol(getManager().addEntity());
 				tcol.addComponent<ColliderComponent>("terrain", x * scalledSize, y * scalledSize, scalledSize, scalledSize);
 				tcol.addGroup(Game::groupColliders);
 				total++;
@@ -128,7 +126,7 @@ void Map::LoadMap(const char * path, int tileswide)
 
 void Map::AddTile(int srcX, int srcY, int xpos, int ypos, int group)
 {
-	auto& tile(manager.addEntity());
+	auto& tile(getManager().addEntity());
 	tile.addComponent<TileComponent>(srcX, srcY, xpos, ypos, tileSize, mapScale, texID);
 	tile.addGroup(group);
 }

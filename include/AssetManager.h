@@ -17,7 +17,7 @@ public:
 	~AssetManager();
 
 	Entity& CreateProjectile(Vector2D pos, Vector2D target, int range, int speed, int width, int height, int scale, float Rot, std::string id, int subGroup, bool points);
-	Entity& CreateNPC(Vector2D pos, int width, int height, int scale, std::string id, int aiType, int group, Entity * player);
+	Entity& CreateNPC(Vector2D pos, int width, int height, int scale, std::string id, int aiType, int group);
 	Entity& CreateButton(int xpos, int ypos, int width, int height, int padding, int sc, ButtonTexture tex, std::string text, bool act, int subGroup, Function function);
 	Entity& CreateLabel(Vector2D pos, std::string text, std::string font, SDL_Color color);
 

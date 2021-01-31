@@ -7,10 +7,23 @@
 #include "AIComponent.h"
 #include "Drop.h"
 
-Map * map;
-Manager manager;
+#include "Enemy_rat.h"
 
-SDL_Renderer * Game::renderer = nullptr;
+Map* map;
+
+Manager manager;
+Manager& getManager()
+{
+	return manager;
+}
+
+auto& player(manager.addEntity());
+Entity& getPlayer()
+{
+	return player;
+}
+
+SDL_Renderer* Game::renderer = nullptr;
 SDL_Event Game::event;
 SDL_Rect Game::camera = {0, 0, 0, 0};
 
@@ -30,8 +43,8 @@ const char * wavefiles[Twavefiles] =
 
 bool Game::isRunning = false;
 
+
 auto& none(manager.addEntity());
-auto& player(manager.addEntity());
 
 auto& soul_label(manager.addEntity());
 auto& pos_label(manager.addEntity());
@@ -45,7 +58,7 @@ Game::~Game()
 void Game::init(const char * title, int xpos, int ypos, int width, int height, bool fullscreen)
 {
 	int flags = 0;
-
+	
 	if (fullscreen)
 	{
 		flags = SDL_WINDOW_FULLSCREEN;
@@ -157,7 +170,9 @@ void Game::init(const char * title, int xpos, int ypos, int width, int height, b
 	pos_label.addComponent<UILabel>(50, WINDOW_HEIGHT - 50, "n/a", "gamer", Color(255, 255, 255, 255));
 	pos_label.addGroup(groupLabels);
 
-	assets->AddSpawn(700, 300, 300, 3, 5, SpawnRat, Game::groupSpawn1);
+	assets->AddSpawn(700, 300, 300, 3, 5, Rat, Game::groupSpawn1);
+
+	//Rat(Vector2D(700, 300), Game::groupEnemies);
 
 	ButtonTexture pausebtn("button_pause", "arial", Color(0, 0, 0, 255));
 	ButtonTexture backpbtn("backpack", "arial", Color(0, 0, 0, 255));
@@ -336,7 +351,7 @@ void Game::update()
 				pos.x -= camera.x;
 				pos.y -= camera.y;
 				auto& label = assets->CreateLabel(pos, stream.str(), "gamer", Color(255, 122, 122, 255));
-				label.addComponent<AIComponent>(AIComponent::damageLabel, &player);
+				label.addComponent<AIComponent>(AIComponent::damageLabel);
 				
 				if (e->getComponent<CharacterComponent>().life.value <= 0)
 				{
@@ -345,7 +360,7 @@ void Game::update()
 					auto& soul = Game::assets->CreateProjectile(e->getComponent<TransformComponent>().center, player.getComponent<TransformComponent>().center, 999, 0.5, 32, 32, 1, 0, "soul", Game::groupItemProjectiles, true);
 					soul.getComponent<SpriteComponent>().Play(0, 8, 100);
 					soul.getComponent<ProjectileComponent>().IID = "soul";
-					soul.addComponent<AIComponent>(AIComponent::soul, &player);
+					soul.addComponent<AIComponent>(AIComponent::soul);
 					soul.getComponent<ProjectileComponent>().damage = e->getComponent<CharacterComponent>().souls;
 					e->getComponent<SpriteComponent>().visible = false;
 					e->destroy();
@@ -553,7 +568,7 @@ int Scan(Vector2D point, int range)
 
 Entity& SpawnEnemy(Vector2D position, int group)
 {
-	auto& enemy = Game::assets->CreateNPC(position, 32, 32, 4, "enemy", AIComponent::enemy, Game::groupEnemies, &player);
+	auto& enemy = Game::assets->CreateNPC(position, 32, 32, 4, "enemy", AIComponent::enemy, Game::groupEnemies);
 	enemy.addComponent<Drop>();
 	enemy.getComponent<Drop>().defineDrop("sword", 5);
 	enemy.getComponent<Drop>().defineDrop("staff", 5);
@@ -565,7 +580,7 @@ Entity& SpawnEnemy(Vector2D position, int group)
 
 Entity& SpawnRat(Vector2D position, int group)
 {
-	auto& enemy = Game::assets->CreateNPC(position, 32, 32, 4, "rat", AIComponent::rat, Game::groupEnemies, &player);
+	auto& enemy = Game::assets->CreateNPC(position, 32, 32, 4, "rat", AIComponent::rat, Game::groupEnemies);
 	
 	enemy.getComponent<CharacterComponent>().dmg = 2;
 	enemy.getComponent<CharacterComponent>().basedmg = 1;
@@ -579,7 +594,7 @@ Entity& SpawnRat(Vector2D position, int group)
 	enemy.getComponent<Drop>().defineDrop("sword", 15);
 	enemy.getComponent<Drop>().defineDrop("staff", 2);
 	enemy.getComponent<Drop>().defineDrop("bow", 2);
-	
+
 	enemy.addGroup(group);
 	enemy.update();
 	return enemy;
@@ -624,3 +639,4 @@ void upDex()
 		player.getComponent<CharacterComponent>().level++;
 	}
 }
+

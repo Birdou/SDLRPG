@@ -11,7 +11,8 @@ class SpawnController : public Component
 {
 public:
 	Vector2D anchor;
-	int range, max_members, last = 0;
+	int range, last = 0;
+	size_t max_members;
 	Uint8 frequency;
 	EnemyPrototype function;
 	int group, effective_range;
@@ -69,7 +70,8 @@ public:
 				c->getComponent<SpriteComponent>().speed = 100;
 			}
 		}
-		if(SDL_GetTicks() - last > 10000 && Scan(anchor, range) < max_members)
+
+		if(SDL_GetTicks() - last > 10000 && components.size() < max_members)
 		{
 			if(positions <= 0)
 			{
@@ -79,7 +81,7 @@ public:
 			int pos = rand() % positions;
 			auto& entity = function(activePositions[pos], group);
 			auto& colliders(getGroup(Game::groupColliders));
-			SDL_Rect eCol = entity.getComponent<ColliderComponent>().collider;
+			SDL_Rect eCol = entity.getComponent<ColliderComponent>().fit;
 			
 			for (auto& c : colliders)
 			{

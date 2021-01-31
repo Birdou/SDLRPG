@@ -30,8 +30,6 @@ public:
 	~InterfaceTexture();
 };
 
-
-
 typedef Entity& (*EnemyPrototype)(Vector2D, int);
 
 void nullFunc();

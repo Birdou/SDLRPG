@@ -34,6 +34,12 @@ public:
 	CharacterComponent()
 	{}
 
+	CharacterComponent(int basedmg, int dmg, int souls, int maxlife):
+	basedmg(basedmg), dmg(dmg), souls(souls)
+	{
+		life.max = maxlife;
+	}
+
 	~CharacterComponent()
 	{}
 

@@ -33,21 +33,11 @@ int main (int argc, char* argv[])
 		{
 			fullscreen = true;
 		}
-		else if (cstrcmp(argv[args], "-DEBUG") == 0 || cstrcmp(argv[args], "--DB") == 0)
-		{
-			debugging = true;
-		}
 		else
 		{
 			std::cout << "Opção inválida \"" << argv[args] << "\"" << std::endl;
 			return -1;
 		}
-	}
-
-	if (!debugging)
-	{
-		//DISABLE MESSAGES
-		fclose(stdout);
 	}
 
 	const int frameDelay = 1000 / FPS;

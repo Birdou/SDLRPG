@@ -14,8 +14,6 @@
 class AIComponent : public Component
 {
 public:
-	Entity * player = NULL;
-
 	TransformComponent * transform;
 	SpriteComponent * sprite;
 	ColliderComponent * collider;
@@ -23,10 +21,8 @@ public:
 	AIComponent()
 	{}
 
-	AIComponent(int ai, Entity * pl) : id(ai)
-	{
-		player = pl;
-	}
+	AIComponent(int ai) : id(ai)
+	{}
 
 	~AIComponent()
 	{}
@@ -65,11 +61,11 @@ public:
 				{
 					playSound(Game::grass, 2, 0);
 				}
-				if (Collision::AABB(view, player->getComponent<ColliderComponent>().collider))
+				if (Collision::AABB(view, getPlayer().getComponent<ColliderComponent>().collider))
 				{
-					if(!Collision::AABB(area, player->getComponent<ColliderComponent>().collider))
+					if(!Collision::AABB(area, getPlayer().getComponent<ColliderComponent>().collider))
 					{
-						float ang = Ang(transform->center, player->getComponent<TransformComponent>().center);
+						float ang = Ang(transform->center, getPlayer().getComponent<TransformComponent>().center);
 						for (auto& c : colliders)
 						{
 							SDL_Rect cCol = c->getComponent<ColliderComponent>().collider;
@@ -102,7 +98,7 @@ public:
 						transform->velocity.Zero();
 						if (SDL_GetTicks() - lastHit > 1000 / 3)
 						{
-							Game::assets->CreateProjectile(transform->center, player->getComponent<TransformComponent>().center, 200, 2, 32, 32, 1, 0, "projectile", Game::groupEnemyProjectiles, true);
+							Game::assets->CreateProjectile(transform->center, getPlayer().getComponent<TransformComponent>().center, 200, 2, 32, 32, 1, 0, "projectile", Game::groupEnemyProjectiles, true);
 							playSound(Game::woosh_f1, 3, 0);
 							lastHit = SDL_GetTicks();
 						}
@@ -136,9 +132,9 @@ public:
 				{
 					playSound(Game::grass, 2, 0);
 				}
-				if(!Collision::AABB(area, player->getComponent<ColliderComponent>().collider))
+				if(!Collision::AABB(area, getPlayer().getComponent<ColliderComponent>().collider))
 				{
-					vel.Rotate(Ang(transform->center, player->getComponent<TransformComponent>().center));
+					vel.Rotate(Ang(transform->center, getPlayer().getComponent<TransformComponent>().center));
 					transform->velocity = vel;
 					if (animation != 1)
 					{
@@ -179,7 +175,7 @@ public:
 			case soul:
 			{
 				Vector2D vel(0.8, 0);
-				float angle = Ang(transform->center, player->getComponent<TransformComponent>().center);
+				float angle = Ang(transform->center, getPlayer().getComponent<TransformComponent>().center);
 				vel.Rotate(angle);
 				transform->velocity = vel;
 				sprite->angle = deg(angle);
@@ -196,10 +192,10 @@ public:
 				{
 					playSound(Game::grass, 2, 0);
 				}
-				float ang = Ang(transform->center, player->getComponent<TransformComponent>().center);
-				if (Collision::AABB(view, player->getComponent<ColliderComponent>().collider))
+				float ang = Ang(transform->center, getPlayer().getComponent<TransformComponent>().center);
+				if (Collision::AABB(view, getPlayer().getComponent<ColliderComponent>().collider))
 				{
-					if(!Collision::AABB(collider->collider, player->getComponent<ColliderComponent>().hitBox))
+					if(!Collision::AABB(collider->collider, getPlayer().getComponent<ColliderComponent>().hitBox))
 					{
 						
 						for (auto& c : colliders)
@@ -235,7 +231,7 @@ public:
 						transform->velocity.Zero();
 						if (SDL_GetTicks() - lastHit > 1000 / 3)
 						{
-							auto& projectile = Game::assets->CreateProjectile(transform->center, player->getComponent<TransformComponent>().center, 999, 0, 32, 32, 5, 0, "attack", Game::groupEnemyProjectiles, true);
+							auto& projectile = Game::assets->CreateProjectile(transform->center, getPlayer().getComponent<TransformComponent>().center, 999, 0, 32, 32, 5, 0, "attack", Game::groupEnemyProjectiles, true);
 							projectile.getComponent<ProjectileComponent>().damage = entity->getComponent<CharacterComponent>().Damage();
 							projectile.getComponent<SpriteComponent>().destroyAfter = true;
 							projectile.getComponent<SpriteComponent>().Play(0, 5, 100);

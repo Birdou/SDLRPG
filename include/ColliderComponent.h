@@ -31,10 +31,10 @@ public:
 	ColliderComponent(std::string t, int xpos, int ypos, int w, int h)
 	{
 		tag = t;
-		collider.x = xpos;
-		collider.y = ypos;
-		collider.h = h;
-		collider.w = w;
+		collider.x = fit.x = hitBox.x = xpos;
+		collider.y = fit.y = hitBox.y = ypos;
+		collider.h = fit.h = hitBox.h = h;
+		collider.w = fit.w = hitBox.w = w;
 	}
 
 	void init() override

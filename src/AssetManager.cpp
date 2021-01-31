@@ -38,14 +38,14 @@ Entity& AssetManager::CreateProjectile(Vector2D pos, Vector2D target, int range,
 	return projectile;
 }
 
-Entity& AssetManager::CreateNPC(Vector2D pos, int width, int height, int scale, std::string id, int aiType, int group, Entity * player)
+Entity& AssetManager::CreateNPC(Vector2D pos, int width, int height, int scale, std::string id, int aiType, int group)
 {
 	auto& NPC(manager->addEntity());
 	NPC.addComponent<TransformComponent>(pos.x, pos.y, width, height, scale);
 	NPC.addComponent<SpriteComponent>(id, true, 0, 0);
 	NPC.getComponent<SpriteComponent>().visible = false;
 	NPC.addComponent<ColliderComponent>(id);
-	NPC.addComponent<AIComponent>(aiType, player);
+	NPC.addComponent<AIComponent>(aiType);
 	NPC.addComponent<CharacterComponent>();
 	NPC.addGroup(group);
 	return NPC;

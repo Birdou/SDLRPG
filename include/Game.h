@@ -27,9 +27,12 @@ public:
 
 	static SDL_Renderer * renderer;
 	static SDL_Event event;
-	static bool isRunning;
 	static SDL_Rect camera;
-	static AssetManager * assets;
+
+	static bool isRunning;
+	
+	static AssetManager* assets;
+	//static Manager manager;
 
 	static std::vector<const char *> itemIDs;
 	static std::map<const char *, Entity> NPCs;
@@ -109,5 +112,8 @@ void upInt();
 void upDex();
 
 Vector2D GetWindowWH();
+
+Entity& getPlayer();
+Manager& getManager();
 
 #endif
