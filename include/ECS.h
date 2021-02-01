@@ -14,36 +14,31 @@ class Component;
 class Entity;
 class Manager;
 
-using ComponentID = std::size_t;
-using Group = std::size_t;
-
 typedef void (*Function)();
 
-inline ComponentID getNewComponentTypeID()
+inline size_t getNewComponentTypeID()
 {
-	static ComponentID lastID = 0u;
+	static size_t lastID = 0u;
 	return lastID++;
 }
 
-template <typename T> inline ComponentID getNewComponentTypeID() noexcept
+template <typename T>
+inline size_t getNewComponentTypeID() noexcept
 {
 	static_assert (std::is_base_of<Component, T>::value, "");
-	static ComponentID typeID = getNewComponentTypeID();
+	static size_t typeID = getNewComponentTypeID();
 	return typeID;
 }
 
-constexpr std::size_t maxComponents = 32;
-constexpr std::size_t maxGroups = 32;
+constexpr size_t maxComponents = 32;
+constexpr size_t maxGroups = 32;
 
-using ComponentBitSet = std::bitset<maxComponents>;
-using GroupBitSet = std::bitset<maxGroups>;
-
-using ComponentArray = std::array<Component *, maxComponents>;
+using Group = size_t;
 
 class Component
 {
 public:
-	Entity * entity;
+	Entity* entity;
 
 	virtual void init() {}
 	virtual void update() {}
@@ -55,17 +50,19 @@ public:
 
 class Entity
 {
-private:
+protected:
 	Manager& manager;
 	bool active = true;
 	std::vector<std::unique_ptr<Component>> components;
 
-	ComponentArray componentArray;
-	ComponentBitSet componentBitSet;
-	GroupBitSet groupBitSet;
+	std::array<Component*, maxComponents> componentArray;
+	std::bitset<maxComponents> componentBitSet;
+	std::bitset<maxGroups> groupBitSet;
 
 public:
-	Entity(Manager& mManager) : manager(mManager) {}
+	Entity(Manager& mManager):
+	manager(mManager)
+	{}
 
 	void update()
 	{
@@ -77,20 +74,21 @@ public:
 	}
 	bool isActive() const { return active; }
 
-	bool hasGroup(Group mGroup)
+	bool hasGroup(size_t mGroup)
 	{
 		return groupBitSet[mGroup];
 	}
 
-	void addGroup(Group mGroup);
-	void delGroup(Group mGroup)
+	void addGroup(size_t mGroup);
+	void delGroup(size_t mGroup)
 	{
 		groupBitSet[mGroup] = false;
 	}
 
 	void destroy() { active = false; }
 
-	template <typename T> bool hasComponent() const
+	template <typename T>
+	bool hasComponent() const
 	{
 		return componentBitSet[getNewComponentTypeID<T>()];
 	}
@@ -109,7 +107,8 @@ public:
 		c->init();
 		return *c;
 	}
-	template <typename T> T& getComponent() const
+	template <typename T>
+	T& getComponent() const
 	{
 		auto ptr(componentArray[getNewComponentTypeID<T>()]);
 		return * static_cast<T*>(ptr);
@@ -155,19 +154,19 @@ public:
 		std::end(entities));
 	}
 
-	void AddToGroup(Entity* mEntity, Group mGroup)
+	void AddToGroup(Entity* mEntity, size_t mGroup)
 	{
 		groupedEntities[mGroup].emplace_back(mEntity);
 	}
 
-	std::vector<Entity*>& getGroup(Group mGroup)
+	std::vector<Entity*>& getGroup(size_t mGroup)
 	{
 		return groupedEntities[mGroup];
 	}
 
 	Entity& addEntity()
 	{
-		Entity * e = new Entity(*this);
+		Entity* e = new Entity(*this);
 		std::unique_ptr<Entity> uPtr{ e };
 		entities.emplace_back(std::move(uPtr));
 		return *e;
@@ -175,7 +174,7 @@ public:
 
 	Entity& addEntity(const char * id)
 	{
-		Entity * e = new Entity(*this);
+		Entity* e = new Entity(*this);
 		std::unique_ptr<Entity> uPtr{ e };
 		entities.emplace_back(std::move(uPtr));
 
@@ -184,7 +183,8 @@ public:
 		return *e;
 	}
 
-	Entity * getEntityByID(const char * id)
+
+	Entity* getEntityByID(const char * id)
 	{
 		return entityID[id];
 	}

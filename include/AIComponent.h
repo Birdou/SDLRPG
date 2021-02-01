@@ -9,7 +9,6 @@
 #include "ColliderComponent.h"
 #include "ProjectileComponent.h"
 #include "UILabel.h"
-#include "Collision.h"
 
 class AIComponent : public Component
 {

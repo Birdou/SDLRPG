@@ -27,6 +27,7 @@ Entity& Rat(Vector2D position, int group)
 	entity.addGroup(group);
 	entity.addGroup(Game::groupEnemies);
 
+	entity.update();
 	return entity;
 }
 

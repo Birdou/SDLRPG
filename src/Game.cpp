@@ -6,6 +6,7 @@
 #include "Menu.h"
 #include "AIComponent.h"
 #include "Drop.h"
+#include "MenuManager.h"
 
 #include "Enemy_rat.h"
 
@@ -16,6 +17,8 @@ Manager& getManager()
 {
 	return manager;
 }
+
+MenuManager mManager;
 
 auto& player(manager.addEntity());
 Entity& getPlayer()
@@ -42,7 +45,6 @@ const char * wavefiles[Twavefiles] =
 };
 
 bool Game::isRunning = false;
-
 
 auto& none(manager.addEntity());
 
@@ -172,37 +174,34 @@ void Game::init(const char * title, int xpos, int ypos, int width, int height, b
 
 	assets->AddSpawn(700, 300, 300, 3, 5, Rat, Game::groupSpawn1);
 
-	//Rat(Vector2D(700, 300), Game::groupEnemies);
-
 	ButtonTexture pausebtn("button_pause", "arial", Color(0, 0, 0, 255));
-	ButtonTexture backpbtn("backpack", "arial", Color(0, 0, 0, 255));
-	ButtonTexture upbtn("levelup_button", "arial", Color(0, 0, 0, 255));
-
 	assets->CreateButton(WINDOW_WIDTH - 26, 26, 32, 32, 0, 1, pausebtn, "", true, -1, pauseMenu);
+
+	ButtonTexture backpbtn("backpack", "arial", Color(0, 0, 0, 255));
 	assets->CreateButton(WINDOW_WIDTH - 66, 26, 32, 32, 0, 1, backpbtn, "", true, -1, backpMenu);
+
+	ButtonTexture upbtn("levelup_button", "arial", Color(0, 0, 0, 255));
 	assets->CreateButton(WINDOW_WIDTH - 106, 26, 32, 32, 0, 1, upbtn, "", true, -1, upMenu);
 
 	ButtonTexture stdbtn("button", "button_hovered", "button_pressed", "gamer", Color(0, 0, 0, 255));
-	assets->CreateButton(400, 320, 300, 75, 2, 1, stdbtn, "EXIT", false, groupPauseButtons, closeGame);
-	assets->CreateButton(400, 220, 300, 75, 2, 1, stdbtn, "-I DON'T DO ANYTHING-", false, groupPauseButtons, nullFunc);
 
-		auto& upmenu(manager.addEntity("upmenu"));
-		upmenu.addComponent<Menu>();
+	MenuUI& pausemenu(mManager.addMenu("pausemenu"));
+	MenuUI& upmenu(mManager.addMenu("upmenu"));
+	
 
-		upmenu.getComponent<Menu>().addBackground("background", 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, "background");
+	pausemenu.addButton("close", 400, 320, 300, 75, 2, 1, stdbtn, "SAIR", false, closeGame);
+	pausemenu.addButton("ida", 400, 220, 300, 75, 2, 1, stdbtn, "EU NAO FACO NADA", false, nullFunc);
 
-		upmenu.getComponent<Menu>().addLabel("constitution", 200, 100, "Constituicao", "gamer", Color(255, 255, 255, 255));
-		upmenu.getComponent<Menu>().addLabel("strength", 200, 150, "Forca", "gamer", Color(255, 255, 255, 255));
-		upmenu.getComponent<Menu>().addLabel("intelligence", 200, 200, "Inteligencia", "gamer", Color(255, 255, 255, 255));
-		upmenu.getComponent<Menu>().addLabel("dexterity", 200, 250, "Destreza", "gamer", Color(255, 255, 255, 255));
+	upmenu.addBackground("background", 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, "background");
+	upmenu.addLabel("constitution", 200, 100, "Constituicao", "gamer", Color(255, 255, 255, 255));
+	upmenu.addLabel("strength", 200, 150, "Forca", "gamer", Color(255, 255, 255, 255));
+	upmenu.addLabel("intelligence", 200, 200, "Inteligencia", "gamer", Color(255, 255, 255, 255));
+	upmenu.addLabel("dexterity", 200, 250, "Destreza", "gamer", Color(255, 255, 255, 255));
+	upmenu.addButton("cbtn", 170, 116, 32, 32, 2, 1, ButtonTexture("plus"), "", false, upCon);
+	upmenu.addButton("sbtn", 170, 166, 32, 32, 2, 1, ButtonTexture("plus"), "", false, upStr);
+	upmenu.addButton("ibtn", 170, 216, 32, 32, 2, 1, ButtonTexture("plus"), "", false, upInt);
+	upmenu.addButton("dbtn", 170, 266, 32, 32, 2, 1, ButtonTexture("plus"), "", false, upDex);
 
-		upmenu.getComponent<Menu>().addButton("cbtn", 170, 116, 32, 32, 2, 1, ButtonTexture("plus"), "", false, upCon);
-		upmenu.getComponent<Menu>().addButton("sbtn", 170, 166, 32, 32, 2, 1, ButtonTexture("plus"), "", false, upStr);
-		upmenu.getComponent<Menu>().addButton("ibtn", 170, 216, 32, 32, 2, 1, ButtonTexture("plus"), "", false, upInt);
-		upmenu.getComponent<Menu>().addButton("dbtn", 170, 266, 32, 32, 2, 1, ButtonTexture("plus"), "", false, upDex);
-
-		upmenu.addGroup(groupUpInterface);
-		upmenu.addGroup(groupInterfaces);
 }
 
 //FOR DRAWING
@@ -284,17 +283,17 @@ void Game::update()
 	pp << "Player position: " << playerPos;
 	pos_label.getComponent<UILabel>().SetLabelText(pp.str());
 
-	if(manager.getEntityByID("upmenu")->getComponent<Menu>().visible)
+	if(mManager.getMenu("upmenu").visible)
 	{
 		std::stringstream css, sss, iss, dss;
 		css << "Constituicao nv. " << player.getComponent<CharacterComponent>().constitution << ": " << player.getComponent<CharacterComponent>().conUpCost() << " almas";
-		manager.getEntityByID("upmenu")->getComponent<Menu>().labels["constitution"]->SetLabelText(css.str());
+		mManager.getMenu("upmenu").labels["constitution"]->SetLabelText(css.str());
 		sss << "Forca nv. "<< player.getComponent<CharacterComponent>().strength  << ": " << player.getComponent<CharacterComponent>().strUpCost() << " almas";
-		manager.getEntityByID("upmenu")->getComponent<Menu>().labels["strength"]->SetLabelText(sss.str());
+		mManager.getMenu("upmenu").labels["strength"]->SetLabelText(sss.str());
 		iss << "Inteligencia nv. " << player.getComponent<CharacterComponent>().intelligence << ": " << player.getComponent<CharacterComponent>().intUpCost() << " almas";
-		manager.getEntityByID("upmenu")->getComponent<Menu>().labels["intelligence"]->SetLabelText(iss.str());
+		mManager.getMenu("upmenu").labels["intelligence"]->SetLabelText(iss.str());
 		dss << "Destreza nv. " << player.getComponent<CharacterComponent>().dexterity << ": " << player.getComponent<CharacterComponent>().dexUpCost() << " almas";
-		manager.getEntityByID("upmenu")->getComponent<Menu>().labels["dexterity"]->SetLabelText(dss.str());
+		mManager.getMenu("upmenu").labels["dexterity"]->SetLabelText(dss.str());
 	}
 
 	//WORLD COLLIDERS
@@ -383,6 +382,7 @@ void Game::update()
 
 	manager.refresh();
 	manager.update();
+	mManager.update();
 
 	Vector2D playerCenter = player.getComponent<TransformComponent>().center;
 	camera.x = playerCenter.x - (WINDOW_WIDTH / 2);
@@ -438,10 +438,15 @@ void Game::render()
 	{
 		i->draw();
 	}
+
+	mManager.draw();
+
 	for (auto& b : buttons)
 	{
 		b->draw();
 	}
+
+	
 
 	SDL_RenderPresent(renderer);
 }
@@ -504,23 +509,18 @@ void turnVisible(Game::gameGroups group)
 
 void pauseMenu()
 {
-	player.getComponent<Inventory>().visible = false;
-	manager.getEntityByID("upmenu")->getComponent<Menu>().visible = false;
-	turnVisible(Game::groupPauseButtons);
+	mManager.turnVisible("pausemenu");
 }
 
 void backpMenu()
 {
-	forceDisable(Game::groupPauseButtons);
-	manager.getEntityByID("upmenu")->getComponent<Menu>().visible = false;
+	mManager.disableAll();
 	player.getComponent<Inventory>().turnVisible();
 }
 
 void upMenu()
 {
-	player.getComponent<Inventory>().visible = false;
-	forceDisable(Game::groupPauseButtons);
-	manager.getEntityByID("upmenu")->getComponent<Menu>().turnVisible();
+	mManager.turnVisible("upmenu");
 }
 
 void closeGame()

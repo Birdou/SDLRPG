@@ -26,7 +26,7 @@ public:
 
 	int basedmg = 0, dmg = 1;
 
-	int souls = 0;
+	int souls = 100;
 	int level = 1;
 
 	int constitution = 1, strength = 1, intelligence = 1, dexterity = 1;

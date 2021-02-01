@@ -5,7 +5,7 @@
 #include <SDL.h>
 
 #include "SpriteComponent.h"
-#include "Collision.h"
+#include "ColliderComponent.h"
 
 class SpawnController : public Component
 {

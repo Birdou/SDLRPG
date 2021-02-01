@@ -57,6 +57,26 @@ public:
 		SetButtonText(text);
 	}
 
+	Button(int xpos, int ypos, int width, int height, int padding, int sc, ButtonTexture tex, std::string text, bool vis) :
+		visible(vis), buttonTexture(tex), buttonText(text), buttonPadding(padding), scale(sc)
+	{
+		srcR.x = 0;
+		srcR.y = 0;
+		srcR.h = srcR.w = 32;
+
+		destR.w = width * sc;
+		destR.h = height * sc;
+		destR.x = xpos - (destR.w / 2);
+		destR.y = ypos - (destR.h / 2);
+
+		this->tex = Game::assets->GetTexture(buttonTexture.button);
+		this->bTex = Game::assets->GetTexture(buttonTexture.button);
+		this->bHov = Game::assets->GetTexture(buttonTexture.button_hovered);
+		this->bPre = Game::assets->GetTexture(buttonTexture.button_pressed);
+
+		SetButtonText(text);
+	}
+
 	~Button()
 	{
 		SDL_DestroyTexture(fnt);

@@ -58,7 +58,7 @@ public:
 			groupUpInterface,
 		//}
 		groupButtons,//{
-			groupPauseButtons,
+			//groupPauseButtons,
 		//}
 		groupSpawns,//{
 			groupSpawn1
@@ -115,5 +115,6 @@ Vector2D GetWindowWH();
 
 Entity& getPlayer();
 Manager& getManager();
+//MenuManager& getMenuManager()
 
 #endif
