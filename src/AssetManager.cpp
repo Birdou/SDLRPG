@@ -3,7 +3,6 @@
 
 #include "AIComponent.h"
 #include "ItemComponent.h"
-#include "SpawnController.h"
 #include "Button.h"
 
 AssetManager::AssetManager(Manager * man) : manager(man)
@@ -72,15 +71,6 @@ Entity& AssetManager::CreateLabel(Vector2D pos, std::string text, std::string fo
 void AssetManager::AddTexture(std::string id, char const * path)
 {
 	textures.emplace(id, TextureManager::LoadTexture(path));
-}
-
-
-
-void AssetManager::AddSpawn(int xpos, int ypos, int rng, int mMembers, int freq, EnemyPrototype func, int subGroup)
-{
-	auto& spawn(manager->addEntity());
-	spawn.addComponent<SpawnController>(xpos, ypos, rng, mMembers, freq, func, subGroup);
-	spawn.addGroup(Game::groupSpawns);
 }
 
 SDL_Texture * AssetManager::GetTexture(std::string id)

@@ -8,7 +8,7 @@
 
 Entity& Rat(Vector2D position, int group)
 {
-	auto& entity(getManager().addEntity());
+	Entity& entity(getManager().addEntity());
 
 	entity.addComponent<TransformComponent>(position.x, position.y, 32, 32, 4);
 	entity.addComponent<SpriteComponent>("rat", true, 0, 0);
@@ -24,8 +24,8 @@ Entity& Rat(Vector2D position, int group)
 	entity.getComponent<Drop>().defineDrop("staff", 2);
 	entity.getComponent<Drop>().defineDrop("bow", 2);
 
-	entity.addGroup(group);
 	entity.addGroup(Game::groupEnemies);
+	entity.addGroup(group);
 
 	entity.update();
 	return entity;

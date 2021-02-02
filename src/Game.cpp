@@ -7,10 +7,9 @@
 #include "AIComponent.h"
 #include "Drop.h"
 #include "MenuManager.h"
+#include "MapManager.h"
 
 #include "Enemy_rat.h"
-
-Map* map;
 
 Manager manager;
 Manager& getManager()
@@ -18,7 +17,8 @@ Manager& getManager()
 	return manager;
 }
 
-MenuManager mManager;
+MenuManager menuManager;
+MapManager mapManager;
 
 auto& player(manager.addEntity());
 Entity& getPlayer()
@@ -104,52 +104,70 @@ void Game::init(const char * title, int xpos, int ypos, int width, int height, b
 	assets->AddFont("arial", "assets/fonts/arial.ttf", 16);
 	assets->AddFont("gamer", "assets/fonts/Gamer.ttf", 28);
 
+	//TEXTURE LOAD
+		//MAPS
 		assets->AddTexture("terrain", "assets/terrain_sst.png");
-		assets->AddTexture("player", "assets/player_anims.png");
+		
+		//PROJECTILES
 		assets->AddTexture("projectile", "assets/arrow.png");
 		assets->AddTexture("friendly_projectile", "assets/proj1.png");
 		assets->AddTexture("attack", "assets/attack.png");
+		
+		//ENEMIES
 		assets->AddTexture("rat", "assets/rat.png");
+		
+		//ITEMS
 		assets->AddTexture("melee", "assets/attack.png");
 		assets->AddTexture("mage", "assets/magic_sphere.png");
 		assets->AddTexture("ranged", "assets/arrow.png");
+		
+		//LIFE BARS
 		assets->AddTexture("ally_life_bar", "assets/ally_life_bar.png");
 		assets->AddTexture("enemy_life_bar", "assets/enemy_life_bar.png");
 		assets->AddTexture("life_bar_background", "assets/life_bar_background.png");
 		assets->AddTexture("HUD_bar", "assets/life_bar.png");
 		assets->AddTexture("HUD_life", "assets/life.png");
+		
+		//MENU TRIGGERS
 		assets->AddTexture("button_pause", "assets/button_pause.png");
 		assets->AddTexture("backpack", "assets/backpack.png");
 		assets->AddTexture("levelup_button", "assets/up.png");
+		
+		//BUTTONS
 		assets->AddTexture("plus", "assets/upgrade.png");
-		assets->AddTexture("background", "assets/background.png");
 		assets->AddTexture("button", "assets/button.png");
 		assets->AddTexture("button_hovered", "assets/button_hovered.png");
 		assets->AddTexture("button_pressed", "assets/button_pressed.png");
-		assets->AddTexture("interface", "assets/interface.png");
-		assets->AddTexture("item_frame", "assets/item_frame.png");
-		assets->AddTexture("item_frame_selected", "assets/item_frame_selected.png");
 		assets->AddTexture("menubackpack", "assets/menubackpack.png");
 		assets->AddTexture("menubackpack_hovered", "assets/menubackpack_hovered.png");
 		assets->AddTexture("menubackpack_pressed", "assets/menubackpack_pressed.png");
+
+		//BACKGROUNDS
+		assets->AddTexture("background", "assets/background.png");
+		assets->AddTexture("interface", "assets/interface.png");
+
+		//FRAMES AND BOXES
+		assets->AddTexture("item_frame", "assets/item_frame.png");
+		assets->AddTexture("item_frame_selected", "assets/item_frame_selected.png");
 		assets->AddTexture("spawneffectframe", "assets/spawneffectframe.png");
 		assets->AddTexture("spawnframe", "assets/spawnframe.png");
-		assets->AddTexture("soul", "assets/soul.png");
 		assets->AddTexture("fit", "assets/fit.png");
 		assets->AddTexture("hitbox", "assets/hitbox.png");
 		assets->AddTexture("frame", "assets/frame.png");
+
+		//OTHER ENTITIES
+		assets->AddTexture("player", "assets/player_anims.png");
+		assets->AddTexture("soul", "assets/soul.png");
 
 	AddItem("sword", "assets/sword.png", "Espada do Aprendiz", ItemComponent::sword, 5);
 	AddItem("staff", "assets/staff.png", "Cajado do Aprendiz", ItemComponent::staff, 5);
 	AddItem("bow", "assets/bow.png", "Arco do Aprendiz", ItemComponent::bow, 5);
 
 	//MAP
-	map = new Map("terrain", 4, 32);
-	map->LoadMap("assets/maps/map.map", 16);
+	Map& terrain(mapManager.addMap("terrain", 4, 32, "assets/maps/main_map.map", 16));
+	terrain.addSpawn(700, 300, 300, 3, 5, Rat, Game::groupSpawn1);
 
-	//ECS
-	camera.w = map->getWidth() - WINDOW_WIDTH;
-	camera.h = map->getHeight() - WINDOW_HEIGHT;
+	mapManager.loadMap("terrain"); //default map
 
 	none.addComponent<TransformComponent>();
 
@@ -172,7 +190,7 @@ void Game::init(const char * title, int xpos, int ypos, int width, int height, b
 	pos_label.addComponent<UILabel>(50, WINDOW_HEIGHT - 50, "n/a", "gamer", Color(255, 255, 255, 255));
 	pos_label.addGroup(groupLabels);
 
-	assets->AddSpawn(700, 300, 300, 3, 5, Rat, Game::groupSpawn1);
+	
 
 	ButtonTexture pausebtn("button_pause", "arial", Color(0, 0, 0, 255));
 	assets->CreateButton(WINDOW_WIDTH - 26, 26, 32, 32, 0, 1, pausebtn, "", true, -1, pauseMenu);
@@ -185,8 +203,8 @@ void Game::init(const char * title, int xpos, int ypos, int width, int height, b
 
 	ButtonTexture stdbtn("button", "button_hovered", "button_pressed", "gamer", Color(0, 0, 0, 255));
 
-	MenuUI& pausemenu(mManager.addMenu("pausemenu"));
-	MenuUI& upmenu(mManager.addMenu("upmenu"));
+	MenuUI& pausemenu(menuManager.addMenu("pausemenu"));
+	MenuUI& upmenu(menuManager.addMenu("upmenu"));
 	
 
 	pausemenu.addButton("close", 400, 320, 300, 75, 2, 1, stdbtn, "SAIR", false, closeGame);
@@ -205,7 +223,6 @@ void Game::init(const char * title, int xpos, int ypos, int width, int height, b
 }
 
 //FOR DRAWING
-auto& tiles(manager.getGroup(Game::groupMap));
 auto& players(manager.getGroup(Game::groupPlayers));
 auto& enemies(manager.getGroup(Game::groupEnemies));
 auto& colliders(manager.getGroup(Game::groupColliders));
@@ -283,17 +300,17 @@ void Game::update()
 	pp << "Player position: " << playerPos;
 	pos_label.getComponent<UILabel>().SetLabelText(pp.str());
 
-	if(mManager.getMenu("upmenu").visible)
+	if(menuManager.getMenu("upmenu").visible)
 	{
 		std::stringstream css, sss, iss, dss;
 		css << "Constituicao nv. " << player.getComponent<CharacterComponent>().constitution << ": " << player.getComponent<CharacterComponent>().conUpCost() << " almas";
-		mManager.getMenu("upmenu").labels["constitution"]->SetLabelText(css.str());
+		menuManager.getMenu("upmenu").labels["constitution"]->SetLabelText(css.str());
 		sss << "Forca nv. "<< player.getComponent<CharacterComponent>().strength  << ": " << player.getComponent<CharacterComponent>().strUpCost() << " almas";
-		mManager.getMenu("upmenu").labels["strength"]->SetLabelText(sss.str());
+		menuManager.getMenu("upmenu").labels["strength"]->SetLabelText(sss.str());
 		iss << "Inteligencia nv. " << player.getComponent<CharacterComponent>().intelligence << ": " << player.getComponent<CharacterComponent>().intUpCost() << " almas";
-		mManager.getMenu("upmenu").labels["intelligence"]->SetLabelText(iss.str());
+		menuManager.getMenu("upmenu").labels["intelligence"]->SetLabelText(iss.str());
 		dss << "Destreza nv. " << player.getComponent<CharacterComponent>().dexterity << ": " << player.getComponent<CharacterComponent>().dexUpCost() << " almas";
-		mManager.getMenu("upmenu").labels["dexterity"]->SetLabelText(dss.str());
+		menuManager.getMenu("upmenu").labels["dexterity"]->SetLabelText(dss.str());
 	}
 
 	//WORLD COLLIDERS
@@ -382,7 +399,8 @@ void Game::update()
 
 	manager.refresh();
 	manager.update();
-	mManager.update();
+	menuManager.update();
+	mapManager.update();
 
 	Vector2D playerCenter = player.getComponent<TransformComponent>().center;
 	camera.x = playerCenter.x - (WINDOW_WIDTH / 2);
@@ -405,10 +423,8 @@ void Game::render()
 	//RENDER LAYERS
 	SDL_RenderClear(renderer);
 
-	for (auto& t : tiles)
-	{
-		t->draw();
-	}
+	mapManager.draw();
+
 	for (auto& s : spawns)
 	{
 		s->draw();
@@ -439,7 +455,7 @@ void Game::render()
 		i->draw();
 	}
 
-	mManager.draw();
+	menuManager.draw();
 
 	for (auto& b : buttons)
 	{
@@ -509,18 +525,18 @@ void turnVisible(Game::gameGroups group)
 
 void pauseMenu()
 {
-	mManager.turnVisible("pausemenu");
+	menuManager.turnVisible("pausemenu");
 }
 
 void backpMenu()
 {
-	mManager.disableAll();
+	menuManager.disableAll();
 	player.getComponent<Inventory>().turnVisible();
 }
 
 void upMenu()
 {
-	mManager.turnVisible("upmenu");
+	menuManager.turnVisible("upmenu");
 }
 
 void closeGame()

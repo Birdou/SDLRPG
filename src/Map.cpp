@@ -3,7 +3,7 @@
 
 #include "Game.h"
 #include "ColliderComponent.h"
-#include "TileComponent.h"
+#include "Tile.h"
 
 Map::Map(std::string tID, int ms, int ts) : texID(tID), mapScale(ms), tileSize(ts)
 {
@@ -33,7 +33,7 @@ void Map::LoadMap(const char * path, int tileswide)
 			srcY = (index / tileswide) * tileSize;
 			srcX = (index % tileswide) * tileSize;
 
-			AddTile(srcX, srcY, x * scalledSize, y * scalledSize, Game::groupMap);
+			addTile(srcX, srcY, x * scalledSize, y * scalledSize);
 		}
 	}
 
@@ -124,11 +124,20 @@ void Map::LoadMap(const char * path, int tileswide)
 	fclose(mapFile);
 }
 
-void Map::AddTile(int srcX, int srcY, int xpos, int ypos, int group)
+Tile& Map::addTile(int srcX, int srcY, int xpos, int ypos)
 {
-	auto& tile(getManager().addEntity());
-	tile.addComponent<TileComponent>(srcX, srcY, xpos, ypos, tileSize, mapScale, texID);
-	tile.addGroup(group);
+	Tile* e = new Tile(srcX, srcY, xpos, ypos, tileSize, mapScale, texID);
+	std::unique_ptr<Tile> uPtr{ e };
+	tiles.emplace_back(std::move(uPtr));
+	return *e;
+}
+
+Spawn& Map::addSpawn(int xpos, int ypos, int rng, int mMembers, int freq, EnemyPrototype func, int group)
+{
+	Spawn* e = new Spawn(xpos, ypos, rng, mMembers, freq, func, group);
+	std::unique_ptr<Spawn> uPtr{ e };
+	spawns.emplace_back(std::move(uPtr));
+	return *e;
 }
 
 int Map::getWidth()

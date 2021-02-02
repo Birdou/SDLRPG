@@ -22,8 +22,7 @@ public:
 	Entity& CreateLabel(Vector2D pos, std::string text, std::string font, SDL_Color color);
 
 	void AddTexture(std::string id, char const * path);
-	
-	void AddSpawn(int xpos, int ypos, int rng, int mMembers, int freq, EnemyPrototype func, int subGroup);
+
 	SDL_Texture * GetTexture(std::string id);
 
 	void AddFont(std::string id, std::string path, int fontSize);

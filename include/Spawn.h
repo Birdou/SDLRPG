@@ -7,7 +7,7 @@
 #include "SpriteComponent.h"
 #include "ColliderComponent.h"
 
-class SpawnController : public Component
+class Spawn
 {
 public:
 	Vector2D anchor;
@@ -20,8 +20,8 @@ public:
 	int positions;
 	std::vector<Vector2D> activePositions;
 
-	SpawnController(int xpos, int ypos, int rng, int mMembers, int freq, EnemyPrototype func, int subGroup) :
-		range(rng), max_members(mMembers), frequency(freq), function(func), group(subGroup)
+	Spawn(int xpos, int ypos, int rng, int mMembers, int freq, EnemyPrototype func, int group) :
+		range(rng), max_members(mMembers), frequency(freq), function(func), group(group)
 	{
 		anchor.x = xpos;
 		anchor.y = ypos;
@@ -46,13 +46,13 @@ public:
 		printf("ACTIVE POSITIONS: %i\n", positions); 
 	}
 
-	~SpawnController()
+	~Spawn()
 	{
 		SDL_DestroyTexture(effc);
 		SDL_DestroyTexture(rang);
 	}
 
-	void update() override
+	void update()
 	{
 		auto& components = getGroup(group);
 		for(auto& c : components)
@@ -79,7 +79,10 @@ public:
 				return;
 			}
 			int pos = rand() % positions;
-			auto& entity = function(activePositions[pos], group);
+
+			Entity& entity = function(activePositions[pos], group);
+
+
 			auto& colliders(getGroup(Game::groupColliders));
 			SDL_Rect eCol = entity.getComponent<ColliderComponent>().fit;
 			
@@ -100,7 +103,7 @@ public:
 		}
 	}
 
-	void draw() override
+	void draw()
 	{
 		#ifdef DEBUG
 			int x = anchor.x - effective_range - Game::camera.x;

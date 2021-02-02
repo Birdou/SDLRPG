@@ -7,7 +7,7 @@
 #include "Game.h"
 #include "TextureManager.h"
 
-class TileComponent : public Component
+class Tile
 {
 public:
 
@@ -15,14 +15,14 @@ public:
 	SDL_Rect srcRect, destRect;
 	Vector2D position;
 
-	TileComponent() = default;
+	Tile() = default;
 
-	~TileComponent()
+	~Tile()
 	{
 		SDL_DestroyTexture(texture);
 	}
 
-	TileComponent(int srcX, int srcY, int xpos, int ypos, int tsize, int tscale, std::string id)
+	Tile(int srcX, int srcY, int xpos, int ypos, int tsize, int tscale, std::string id)
 	{
 		texture = Game::assets->GetTexture(id);
 
@@ -38,13 +38,13 @@ public:
 		destRect.w = destRect.h = tsize * tscale;
 	}
 
-	void update() override
+	void update()
 	{
 		destRect.x = static_cast<int>(position.x - Game::camera.x);
 		destRect.y = static_cast<int>(position.y - Game::camera.y);
 	}
 
-	void draw() override
+	void draw()
 	{
 		TextureManager::Draw(texture, srcRect, destRect, 0, SDL_FLIP_NONE);
 	}
