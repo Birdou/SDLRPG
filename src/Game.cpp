@@ -172,6 +172,7 @@ void Game::init(const char * title, int xpos, int ypos, int width, int height, b
 	none.addComponent<TransformComponent>();
 
 	player.addComponent<TransformComponent>(800.0f, 640.0f, 32, 32, 4);
+
 	player.addComponent<SpriteComponent>("player", true, 0, 0);
 	player.addComponent<KeyboardController>();
 
@@ -193,13 +194,13 @@ void Game::init(const char * title, int xpos, int ypos, int width, int height, b
 	
 
 	ButtonTexture pausebtn("button_pause", "arial", Color(0, 0, 0, 255));
-	assets->CreateButton(WINDOW_WIDTH - 26, 26, 32, 32, 0, 1, pausebtn, "", true, -1, pauseMenu);
+	assets->CreateButton(Vector2D(WINDOW_WIDTH - 26, 26), 32, 32, 0, 1, pausebtn, "", true, -1, pauseMenu);
 
 	ButtonTexture backpbtn("backpack", "arial", Color(0, 0, 0, 255));
-	assets->CreateButton(WINDOW_WIDTH - 66, 26, 32, 32, 0, 1, backpbtn, "", true, -1, backpMenu);
+	assets->CreateButton(Vector2D(WINDOW_WIDTH - 66, 26), 32, 32, 0, 1, backpbtn, "", true, -1, backpMenu);
 
 	ButtonTexture upbtn("levelup_button", "arial", Color(0, 0, 0, 255));
-	assets->CreateButton(WINDOW_WIDTH - 106, 26, 32, 32, 0, 1, upbtn, "", true, -1, upMenu);
+	assets->CreateButton(Vector2D(WINDOW_WIDTH - 106, 26), 32, 32, 0, 1, upbtn, "", true, -1, upMenu);
 
 	ButtonTexture stdbtn("button", "button_hovered", "button_pressed", "gamer", Color(0, 0, 0, 255));
 
@@ -207,6 +208,7 @@ void Game::init(const char * title, int xpos, int ypos, int width, int height, b
 	MenuUI& upmenu(menuManager.addMenu("upmenu"));
 	
 
+	pausemenu.addBackground("background", 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, "background");
 	pausemenu.addButton("close", 400, 320, 300, 75, 2, 1, stdbtn, "SAIR", false, closeGame);
 	pausemenu.addButton("ida", 400, 220, 300, 75, 2, 1, stdbtn, "EU NAO FACO NADA", false, nullFunc);
 
@@ -288,9 +290,8 @@ void Game::handleEvents()
 
 void Game::update()
 {
-
-	SDL_Rect playerCol = player.getComponent<ColliderComponent>().collider;
-	Vector2D playerPos = player.getComponent<TransformComponent>().position;
+	SDL_Rect& playerCol = player.getComponent<ColliderComponent>().collider;
+	Vector2D& playerPos = player.getComponent<TransformComponent>().position;
 
 	std::stringstream souls;
 	souls << "souls: " << player.getComponent<CharacterComponent>().souls;
@@ -315,12 +316,11 @@ void Game::update()
 
 	//WORLD COLLIDERS
 	SDL_Rect playerFit = player.getComponent<ColliderComponent>().fit;
-	for (auto& c : colliders)
+	for (auto& c : mapManager.getColliders())
 	{
 		for (auto& p : players)
 		{
-			SDL_Rect cCol = c->getComponent<ColliderComponent>().collider;
-			if(Collision::AABB(cCol, playerFit))
+			if(Collision::AABB(c->collider, playerFit))
 			{
 				p->getComponent<TransformComponent>().position = p->getComponent<TransformComponent>().last_position;
 			}
@@ -405,12 +405,12 @@ void Game::update()
 	Vector2D playerCenter = player.getComponent<TransformComponent>().center;
 	camera.x = playerCenter.x - (WINDOW_WIDTH / 2);
 	camera.y = playerCenter.y - (WINDOW_HEIGHT / 2);
-
+	
 	if (playerPos.x < 0) player.getComponent<TransformComponent>().position.x = 0;
 	if (playerPos.y < 0) player.getComponent<TransformComponent>().position.y = 0;
 	if (playerPos.x > camera.w + WINDOW_WIDTH - playerCol.w) player.getComponent<TransformComponent>().position.x = camera.w + WINDOW_WIDTH - playerCol.w;
 	if (playerPos.y > camera.h + WINDOW_HEIGHT - playerCol.h) player.getComponent<TransformComponent>().position.y = camera.h + WINDOW_HEIGHT - playerCol.h;
-
+	
 	if (camera.x < 0) camera.x = 0;
 	if (camera.y < 0) camera.y = 0;
 	if (camera.x > camera.w) camera.x = camera.w;
@@ -536,6 +536,7 @@ void backpMenu()
 
 void upMenu()
 {
+	std::cout << "call" << std::endl;
 	menuManager.turnVisible("upmenu");
 }
 

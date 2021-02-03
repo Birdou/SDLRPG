@@ -5,7 +5,7 @@
 #include <SDL.h>
 #include <SDL_ttf.h>
 
-#include "Game.h"
+#include "TextureManager.h"
 
 class UILabel : public Component
 {
@@ -45,7 +45,7 @@ public:
 			if(labelText == text) return;
 			if(labelTexture != NULL)
 				SDL_DestroyTexture(labelTexture);
-			SDL_Surface * surf = TTF_RenderText_Blended(Game::assets->GetFont(labelFont), text.c_str(), textColour);
+			SDL_Surface* surf = TTF_RenderText_Blended(Game::assets->GetFont(labelFont), text.c_str(), textColour);
 			labelTexture = SDL_CreateTextureFromSurface(Game::renderer, surf);
 			SDL_FreeSurface(surf);
 			SDL_QueryTexture(labelTexture, nullptr, nullptr, &position.w, &position.h);
@@ -65,7 +65,7 @@ public:
 	{
 		if(visible)
 		{
-			SDL_RenderCopy(Game::renderer, labelTexture, nullptr, &position);
+			TextureManager::Draw(labelTexture, position);
 		}
 	}
 };

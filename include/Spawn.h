@@ -114,8 +114,8 @@ public:
 			y = anchor.y - range - Game::camera.y;
 			w = range * 2;
 			SDL_Rect rangR = {x, y, w, w};
-			SDL_RenderCopy(Game::renderer, effc, nullptr, &effcR);
-			SDL_RenderCopy(Game::renderer, rang, nullptr, &rangR);
+			TextureManager::Draw(effc, effcR);
+			TextureManager::Draw(rang, rangR);
 		#endif
 	}
 };

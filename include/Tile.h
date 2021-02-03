@@ -46,7 +46,7 @@ public:
 
 	void draw()
 	{
-		TextureManager::Draw(texture, srcRect, destRect, 0, SDL_FLIP_NONE);
+		TextureManager::Draw(texture, srcRect, destRect);
 	}
 
 };

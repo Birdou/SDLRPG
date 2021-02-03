@@ -11,7 +11,7 @@ AssetManager::AssetManager(Manager * man) : manager(man)
 AssetManager::~AssetManager()
 {}
 
-Entity& AssetManager::CreateProjectile(Vector2D pos, Vector2D target, int range, int speed, int width, int height, int scale, float Rot, std::string id, int subGroup, bool points)
+Entity& AssetManager::CreateProjectile(const Vector2D& pos, const Vector2D& target, int range, int speed, int width, int height, int scale, float Rot, const std::string& id, int subGroup, bool points)
 {
 	auto& projectile(manager->addEntity());
 
@@ -37,7 +37,7 @@ Entity& AssetManager::CreateProjectile(Vector2D pos, Vector2D target, int range,
 	return projectile;
 }
 
-Entity& AssetManager::CreateNPC(Vector2D pos, int width, int height, int scale, std::string id, int aiType, int group)
+Entity& AssetManager::CreateNPC(const Vector2D& pos, int width, int height, int scale, const std::string& id, int aiType, int group)
 {
 	auto& NPC(manager->addEntity());
 	NPC.addComponent<TransformComponent>(pos.x, pos.y, width, height, scale);
@@ -50,17 +50,17 @@ Entity& AssetManager::CreateNPC(Vector2D pos, int width, int height, int scale, 
 	return NPC;
 }
 
-Entity& AssetManager::CreateButton(int xpos, int ypos, int width, int height, int padding, int sc, ButtonTexture tex, std::string text, bool vis, int subGroup, Function function)
+Entity& AssetManager::CreateButton(const Vector2D& pos, int width, int height, int padding, int sc, const ButtonTexture& tex, const std::string& text, bool vis, int subGroup, Function function)
 {
 	auto& button(manager->addEntity());
-	button.addComponent<Button>(xpos, ypos, width, height, padding, sc, tex, text, vis, function);
+	button.addComponent<Button>(pos.x, pos.y, width, height, padding, sc, tex, text, vis, function);
 	button.addGroup(Game::groupButtons);
 	if(subGroup >= 0)
 		button.addGroup(subGroup);
 	return button;
 }
 
-Entity& AssetManager::CreateLabel(Vector2D pos, std::string text, std::string font, SDL_Color color)
+Entity& AssetManager::CreateLabel(const Vector2D& pos, const std::string& text, const std::string& font, SDL_Color color)
 {
 	auto& label(manager->addEntity());
 	label.addComponent<UILabel>(pos.x, pos.y, text, font, color);
@@ -68,22 +68,22 @@ Entity& AssetManager::CreateLabel(Vector2D pos, std::string text, std::string fo
 	return label;
 }
 
-void AssetManager::AddTexture(std::string id, char const * path)
+void AssetManager::AddTexture(const std::string& id, char const * path)
 {
 	textures.emplace(id, TextureManager::LoadTexture(path));
 }
 
-SDL_Texture * AssetManager::GetTexture(std::string id)
+SDL_Texture * AssetManager::GetTexture(const std::string& id)
 {
 	return textures[id];
 }
 
-void AssetManager::AddFont(std::string id, std::string path, int fontSize)
+void AssetManager::AddFont(const std::string& id, const std::string& path, int fontSize)
 {
 	fonts.emplace(id, TTF_OpenFont(path.c_str(), fontSize));
 }
 
-TTF_Font * AssetManager::GetFont(std::string id)
+TTF_Font * AssetManager::GetFont(const std::string& id)
 {
 	return fonts[id];
 }

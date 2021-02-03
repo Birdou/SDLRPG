@@ -68,9 +68,9 @@ void Map::LoadMap(const char * path, int tileswide)
 			}
 			if(count > 1)
 			{
-				auto& tcol(getManager().addEntity());
-				tcol.addComponent<ColliderComponent>("terrain", initial * scalledSize, y * scalledSize, count * scalledSize, scalledSize);
-				tcol.addGroup(Game::groupColliders);
+				Collider* c = new Collider(initial * scalledSize, y * scalledSize, count * scalledSize, scalledSize);
+				std::unique_ptr<Collider> uPtr{ c };
+				colliders.emplace_back(std::move(uPtr));
 				optimized += count;
 				total++;
 			}
@@ -93,9 +93,10 @@ void Map::LoadMap(const char * path, int tileswide)
 			}
 			if(count > 1)
 			{
-				auto& tcol(getManager().addEntity());
-				tcol.addComponent<ColliderComponent>("terrain", x * scalledSize, initial * scalledSize, scalledSize, count * scalledSize);
-				tcol.addGroup(Game::groupColliders);
+				Collider* c = new Collider(x * scalledSize, initial * scalledSize, scalledSize, count * scalledSize);
+				std::unique_ptr<Collider> uPtr{ c };
+				colliders.emplace_back(std::move(uPtr));
+
 				optimized += count;
 				total++;
 			}
@@ -108,9 +109,9 @@ void Map::LoadMap(const char * path, int tileswide)
 		{
 			if(map[y][x] == 0)
 			{
-				auto& tcol(getManager().addEntity());
-				tcol.addComponent<ColliderComponent>("terrain", x * scalledSize, y * scalledSize, scalledSize, scalledSize);
-				tcol.addGroup(Game::groupColliders);
+				Collider* c = new Collider(x * scalledSize, y * scalledSize, scalledSize, scalledSize);
+				std::unique_ptr<Collider> uPtr{ c };
+				colliders.emplace_back(std::move(uPtr));
 				total++;
 			}
 		}

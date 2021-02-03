@@ -19,10 +19,10 @@ struct Attribute
 class CharacterComponent : public Component
 {
 public:
-	SDL_Rect srcR, bar;
-	SDL_Texture * main_bar;
+	SDL_Rect bar;
+	SDL_Texture* main_bar;
 	Attribute life;
-	TransformComponent * transform;
+	TransformComponent* transform;
 
 	int basedmg = 0, dmg = 1;
 
@@ -69,9 +69,6 @@ public:
 		}
 		main_bar = Game::assets->GetTexture("life_bar_background");
 
-		srcR.x = srcR.y = 0;
-		srcR.w = srcR.h = 32;
-
 		life.attbar.h = bar.h = 32;
 		life.attbar.w = bar.w = 128;
 		life.attbar.x = bar.x = transform->center.x - (bar.w / 2);
@@ -95,8 +92,8 @@ public:
 
 	void draw() override
 	{
-		TextureManager::Draw(main_bar, srcR, bar, 0, SDL_FLIP_NONE);
-		TextureManager::Draw(life.tex, srcR, life.attbar, 0, SDL_FLIP_NONE);
+		TextureManager::Draw(main_bar, bar);
+		TextureManager::Draw(life.tex, life.attbar);
 	}
 };
 

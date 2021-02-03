@@ -5,24 +5,7 @@
 #include <SDL.h>
 
 #include "CharacterComponent.h"
-
-class Collision
-{
-public:
-	static bool AABB(const SDL_Rect& recA, const SDL_Rect& recB)
-	{
-		if (
-			recA.x + recA.w >= recB.x &&
-			recB.x + recB.w >= recA.x &&
-			recA.y + recA.h >= recB.y &&
-			recB.y + recB.h >= recA.y
-			)
-		{
-			return true;
-		}
-		return false;
-	}
-};
+#include "Collision.h"
 
 class ColliderComponent : public Component
 {
@@ -36,7 +19,7 @@ public:
 	int fitx = 0, fity = 0, fitw = 0, fith = 0;
 	int hitx = 0, hity = 0, hitw = 0, hith = 0;
 
-	TransformComponent * transform;
+	TransformComponent* transform;
 	
 	ColliderComponent()
 	{}
@@ -135,12 +118,11 @@ public:
 			SDL_Rect tmp2 = {hitBox.x - Game::camera.x, hitBox.y - Game::camera.y, hitBox.w, hitBox.h};
 			SDL_Rect tmp3 = {fit.x - Game::camera.x, fit.y - Game::camera.y, fit.w, fit.h};
 
-			SDL_RenderCopy(Game::renderer, boxtex, &scrR, &tmp1);
+			TextureManager::Draw(boxtex, scrR, tmp1);
 			if(entity->hasComponent<CharacterComponent>())
 			{
-				
-				SDL_RenderCopy(Game::renderer, hittex, &scrR, &tmp2);
-				SDL_RenderCopy(Game::renderer, fittex, &scrR, &tmp3);
+				TextureManager::Draw(hittex, scrR, tmp2);
+				TextureManager::Draw(fittex, scrR, tmp3);
 			}
 		#endif
 	}

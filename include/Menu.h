@@ -13,9 +13,9 @@ class Menu : public Component
 public:
 	bool visible = false;
 
-	std::map<const char *, Button *> buttons;
-	std::map<const char *, Background *> backgrounds;
-	std::map<const char *, UILabel *> labels;
+	std::map<const char *, Button*> buttons;
+	std::map<const char *, Background*> backgrounds;
+	std::map<const char *, UILabel*> labels;
 
 	Menu()
 	{}

@@ -50,8 +50,8 @@ public:
 
 	TransformComponent(float x, float y, int h, int w, int sc)
 	{
-		position.x = x;
-		position.y = y;
+		last_position.x = position.x = x;
+		last_position.y = position.y = y;
 		height = h;
 		width = w;
 		scale = sc;
@@ -59,6 +59,7 @@ public:
 		relative_center.y = (height * scale) / 2;
 		center.x = position.x + relative_center.x;
 		center.y = position.y + relative_center.y;
+		update();
 	}
 
 	void init() override

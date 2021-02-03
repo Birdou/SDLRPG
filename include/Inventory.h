@@ -110,8 +110,8 @@ public:
 
 	void draw()
 	{
-		SDL_RenderCopy(Game::renderer, tex, nullptr, &destR);
-		SDL_RenderCopy(Game::renderer, fnt, nullptr, &btn);
+		TextureManager::Draw(tex, destR);
+		TextureManager::Draw(fnt, btn);
 	}
 };
 
@@ -222,9 +222,11 @@ public:
 
 	void draw()
 	{
-		SDL_RenderCopy(Game::renderer, frame_tex, nullptr, &destR);
+		TextureManager::Draw(frame_tex, destR);
 		if(isAlreadyOccupied)
-			SDL_RenderCopy(Game::renderer, item_tex, nullptr, &destR);
+		{
+			TextureManager::Draw(item_tex, destR);
+		}
 	}
 };
 
@@ -414,11 +416,11 @@ public:
 
 	void draw() override
 	{
-		SDL_RenderCopy(Game::renderer, HUD_bar, nullptr, &HUD_bar_rect);
-		SDL_RenderCopy(Game::renderer, HUD_life, nullptr, &HUD_life_rect);
+		TextureManager::Draw(HUD_bar, HUD_bar_rect);
+		TextureManager::Draw(HUD_life, HUD_life_rect);
 		if (visible)
 		{
-			SDL_RenderCopy(Game::renderer, inventory, nullptr, &destR);
+			TextureManager::Draw(inventory, destR);
 			for(int i = 0; i < mCols; i++)
 			{
 				for(int j = 0; j < mLins; j++)

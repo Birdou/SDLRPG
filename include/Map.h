@@ -8,6 +8,7 @@
 
 #include "Tile.h"
 #include "Spawn.h"
+#include "Collider.h"
 
 class Map
 {
@@ -15,6 +16,7 @@ private:
 	std::string texID;
 	std::vector<std::unique_ptr<Tile>> tiles;
 	std::vector<std::unique_ptr<Spawn>> spawns;
+	std::vector<std::unique_ptr<Collider>> colliders;
 
 	int mapScale;
 	int tileSize;
@@ -35,16 +37,23 @@ public:
 	int getWidth();
 	int getHeight();
 
+	const std::vector<std::unique_ptr<Collider>>& getColliders()
+	{
+		return colliders;
+	}
+
 	void update()
 	{
 		for(auto& t : tiles) t->update();
 		for(auto& s : spawns) s->update();
+		for(auto& c : colliders) c->update();
 	}
 
 	void draw()
 	{
 		for(auto& t : tiles) t->draw();
 		for(auto& s : spawns) s->draw();
+		for(auto& c : colliders) c->draw();
 	}
 
 };

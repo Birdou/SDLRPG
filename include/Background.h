@@ -4,23 +4,23 @@
 
 #include <string>
 
-#include "Game.h"
+#include "TextureManager.h"
 
 class Background : public Component
 {
 private:
-	SDL_Rect background;
-	SDL_Texture * texture;
+	SDL_Rect destRect;
+	SDL_Texture* texture;
 
 public:
 	bool visible = false;
 
 	Background(int xpos, int ypos, int width, int height, std::string tex)
 	{
-		background.w = width;
-		background.h = height;
-		background.x = xpos /*- (background.w / 2)*/;
-		background.y = ypos /*- (background.h / 2)*/;
+		destRect.w = width;
+		destRect.h = height;
+		destRect.x = xpos;
+		destRect.y = ypos;
 
 		texture = Game::assets->GetTexture(tex);
 	}
@@ -34,7 +34,7 @@ public:
 	{
 		if(visible)
 		{
-			SDL_RenderCopy(Game::renderer, texture, nullptr, &background);
+			TextureManager::Draw(texture, destRect);
 		}
 	}
 };

@@ -36,6 +36,11 @@ public:
 		return *maps[name];
 	}
 
+	const std::vector<std::unique_ptr<Collider>>& getColliders()
+	{
+		return maps[currentMap]->getColliders();
+	}
+
 	void update()
 	{
 		maps[currentMap]->update();

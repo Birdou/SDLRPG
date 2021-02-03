@@ -4,7 +4,7 @@
 
 #include <SDL.h>
 
-#include "Game.h"
+#include "TextureManager.h"
 
 class Button : public Component
 {
@@ -149,9 +149,11 @@ public:
 	{
 		if(visible)
 		{
-			//TextureManager::Draw(tex, srcR, destR, 0, SDL_FLIP_NONE);
-			SDL_RenderCopy(Game::renderer, tex, nullptr, &destR);
-			SDL_RenderCopy(Game::renderer, fnt, nullptr, &btn);
+			TextureManager::Draw(tex, destR);
+			if(buttonText != "")
+			{
+				TextureManager::Draw(fnt, btn);
+			}
 		}
 	}
 };

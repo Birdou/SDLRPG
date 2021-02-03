@@ -91,6 +91,7 @@ class MenuManager
 {
 private:
 	std::map<std::string, std::unique_ptr<MenuUI>> menus;
+	bool showing = false;
 
 public:
 	MenuUI& addMenu(std::string name)
@@ -113,9 +114,11 @@ public:
 			if(m.second->visible)
 			{
 				m.second->update();
+				showing = true;
 				return;
 			}
 		}
+		showing = false;
 	}
 
 	void draw()
