@@ -55,7 +55,22 @@ Game::Game()
 {}
 
 Game::~Game()
-{}
+{
+	delete Game::assets;
+	std::cout << "Mix: Free chunk (*)..." << std::endl;
+	for(int i = 0; i < Twavefiles; i++)
+	{
+		Mix_FreeChunk(mix_chunk[i]);
+	}
+	std::cout << "Mix: Close audio..." << std::endl;
+	Mix_CloseAudio();
+	std::cout << "SDL: Destroy window" << std::endl;
+	SDL_DestroyWindow(window);
+	std::cout << "SDL: Destroy renderer" << std::endl;
+	SDL_DestroyRenderer(renderer);
+	std::cout << "SDL: Quit" << std::endl;
+	SDL_Quit();
+}
 
 void Game::init(const char * title, int xpos, int ypos, int width, int height, bool fullscreen)
 {
@@ -465,23 +480,6 @@ void Game::render()
 	
 
 	SDL_RenderPresent(renderer);
-}
-
-void Game::clean()
-{
-	printf("Mix: Free chunk (*)...\n");
-	for(int i = 0; i < Twavefiles; i++)
-	{
-		Mix_FreeChunk(mix_chunk[i]);
-	}
-	printf("Mix: Close audio...\n");
-	Mix_CloseAudio();
-	printf("SDL: Destroy window\n");
-	SDL_DestroyWindow(window);
-	printf("SDL: Destroy renderer\n");
-	SDL_DestroyRenderer(renderer);
-	printf("SDL: Quit\n");
-	SDL_Quit();
 }
 
 void Game::AddItem(const char * id, const char * path, const char * name, int style, int damage)

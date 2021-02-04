@@ -1,7 +1,7 @@
 
 #include "Game.h"
 
-Game * game = nullptr;
+Game* game = nullptr;
 bool fullscreen = false, debugging = false;
 
 int main (int argc, char* argv[])
@@ -64,7 +64,7 @@ int main (int argc, char* argv[])
 		}
 	}
 
-	game->clean();
+	delete game;
 
 	return 0;
 }

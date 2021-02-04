@@ -9,7 +9,12 @@ AssetManager::AssetManager(Manager * man) : manager(man)
 {}
 
 AssetManager::~AssetManager()
-{}
+{
+	std::cout << "AssetManager:: Destroy textures..." << std::endl;
+	for(auto t : textures) SDL_DestroyTexture(t.second);
+	std::cout << "AssetManager:: Close fonts..." << std::endl;
+	for(auto t : fonts) TTF_CloseFont(t.second);
+}
 
 Entity& AssetManager::CreateProjectile(const Vector2D& pos, const Vector2D& target, int range, int speed, int width, int height, int scale, float Rot, const std::string& id, int subGroup, bool points)
 {

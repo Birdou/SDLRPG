@@ -15,8 +15,8 @@ public:
 	bool active;
 	SDL_Rect btn;
 	ButtonTexture buttonTexture;
-	SDL_Texture * fnt, * tex;
-	SDL_Texture * bTex, * bHov, * bPre;
+	SDL_Texture* fnt, * tex;
+	SDL_Texture* bTex, * bHov, * bPre;
 	std::string buttonText;
 	SDL_Rect srcR, destR;
 	bool pressed = false;
@@ -25,7 +25,7 @@ public:
 	InventoryButton()
 	{}
 
-	InventoryButton(int xpos, int ypos, int width, int height, int padding, ButtonTexture tex, std::string text) :
+	InventoryButton(int xpos, int ypos, int width, int height, int padding, const ButtonTexture& tex, const std::string& text):
 		buttonTexture(tex), buttonText(text), buttonPadding(padding)
 	{
 		srcR.x = 0;
@@ -45,15 +45,26 @@ public:
 		SetButtonText(text);
 	}
 
-	~InventoryButton()
+	InventoryButton(int xpos, int ypos, int width, int height, int padding, const ButtonTexture& tex):
+		buttonTexture(tex), buttonPadding(padding)
 	{
-		//SDL_DestroyTexture(fnt);
-		//SDL_DestroyTexture(tex);
+		srcR.x = 0;
+		srcR.y = 0;
+		srcR.h = srcR.w = 32;
 
-		//SDL_DestroyTexture(bTex);
-		//SDL_DestroyTexture(bHov);
-		//SDL_DestroyTexture(bPre);
+		destR.w = width;
+		destR.h = height;
+		destR.x = xpos;
+		destR.y = ypos;
+
+		this->tex = Game::assets->GetTexture(buttonTexture.button);
+		this->bTex = Game::assets->GetTexture(buttonTexture.button);
+		this->bHov = Game::assets->GetTexture(buttonTexture.button_hovered);
+		this->bPre = Game::assets->GetTexture(buttonTexture.button_pressed);
 	}
+
+	~InventoryButton()
+	{}
 
 	void SetButtonText(std::string text)
 	{
@@ -111,7 +122,10 @@ public:
 	void draw()
 	{
 		TextureManager::Draw(tex, destR);
-		TextureManager::Draw(fnt, btn);
+		if(buttonText != "")
+		{
+			TextureManager::Draw(fnt, btn);
+		}
 	}
 };
 
@@ -140,9 +154,7 @@ public:
 	}
 
 	~ItemFrame()
-	{
-		SDL_DestroyTexture(frame_tex);
-	}
+	{}
 
 	void setItem(const char * itemID)
 	{

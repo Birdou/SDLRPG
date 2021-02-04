@@ -23,7 +23,6 @@ public:
 	void update();
 	bool running() { return isRunning; }
 	void render();
-	void clean();
 
 	static SDL_Renderer * renderer;
 	static SDL_Event event;

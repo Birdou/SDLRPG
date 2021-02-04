@@ -9,7 +9,7 @@
 FILE_SDLP=SDLP.exe
 
 COMPILER_SDLP=g++
-COMPILATION_FLAGS_SDLP=-Wall -Wextra -pedantic -Wno-unused-result -IY:/MinGW/include/SDL2 -DDEBUG
+COMPILATION_FLAGS_SDLP=-Wall -Wextra -pedantic -Wno-unused-result -IY:/MinGW/include/SDL2 -g -DDEBUG
 LINKER_FLAGS_SDLP=-lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf
 
 #-mwindows
