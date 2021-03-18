@@ -23,7 +23,7 @@ public:
 	void update();
 	bool running() { return isRunning; }
 	void render();
-
+	
 	static SDL_Renderer * renderer;
 	static SDL_Event event;
 	static SDL_Rect camera;

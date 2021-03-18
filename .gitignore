@@ -2,5 +2,4 @@ objects/
 *.lnk
 *.exe
 *.zip
-*.sublime-project
-*.sublime-workspace
+*.code-workspace
