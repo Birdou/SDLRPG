@@ -1,8 +1,0 @@
-<map id="CharacterComponent" name="CharacterComponent">
-<area shape="rect" id="node1" title=" " alt="" coords="125,332,285,359"/>
-<area shape="rect" id="node2" href="$classComponent.html" title=" " alt="" coords="139,95,237,121"/>
-<area shape="rect" id="node5" href="$classTransformComponent.html" title=" " alt="" coords="5,243,168,269"/>
-<area shape="rect" id="node3" href="$classEntity.html" title=" " alt="" coords="158,5,218,32"/>
-<area shape="rect" id="node4" href="$structAttribute.html" title=" " alt="" coords="243,243,322,269"/>
-<area shape="rect" id="node6" href="$classVector2D.html" title=" " alt="" coords="13,95,94,121"/>
-</map>

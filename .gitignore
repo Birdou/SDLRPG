@@ -1,5 +1,10 @@
-objects/
+.vs
+.vscode
+objects
+doxygen
+
 *.lnk
 *.exe
 *.zip
+*.rar
 *.code-workspace
